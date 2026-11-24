@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onanefe Addison — Data Analyst</title>
+<meta name="description" content="Onanefe Addison is a data analyst in Nigeria, working in SQL, Excel and Power BI. Selected case studies in churn, revenue and climate-risk analysis.">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('theme'); } catch (e) {}
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ---------- Tokens ---------- */
+  :root {
+    --bg: #F9F8F6;
+    --text: #111111;
+    --accent: #9E7B4F;
+    --border: #E5E0D8;
+    --muted: #66615A;
+    --surface: #EFECE6;          /* warm grey for image wells */
+    --chart-muted: #CFC6B8;
+    --dot-opacity: 0.2;
+    --nav-bg: rgba(249, 248, 246, 0.8);
+    --code-bg: #FFFFFF;
+    --shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --t: 0.4s var(--ease);
+    --serif: 'Crimson Pro', Georgia, serif;
+    --sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B0C0E; --text: #F3F1EC; --accent: #D4AF37; --border: #303139; --muted: #A6A6A6;
+      --surface: #141519; --chart-muted: #3A3B44; --dot-opacity: 0.05;
+      --nav-bg: rgba(11, 12, 14, 0.8); --code-bg: #111216; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B0C0E; --text: #F3F1EC; --accent: #D4AF37; --border: #303139; --muted: #A6A6A6;
+    --surface: #141519; --chart-muted: #3A3B44; --dot-opacity: 0.05;
+    --nav-bg: rgba(11, 12, 14, 0.8); --code-bg: #111216; color-scheme: dark;
+  }
+  /* The contact section is always onyx */
+  .inverted {
+    --bg: #0B0C0E; --text: #F3F1EC; --accent: #D4AF37; --border: #303139; --muted: #A6A6A6;
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--sans); font-size: 16px; line-height: 1.65;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+    transition: background-color var(--t), color var(--t);
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+  img, svg { display: block; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 768px) { .container { padding: 0 48px; } }
+  .serif { font-family: var(--serif); }
+  .mono-label {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted);
+  }
+  .gold { color: var(--accent); }
+  .icon { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  * { transition-property: background-color, border-color, color, fill, stroke, opacity; transition-duration: 0.4s; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+  :focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- Nav ---------- */
+  .nav {
+    position: fixed; inset: 0 0 auto 0; height: 80px; z-index: 50;
+    background: var(--nav-bg); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav .container { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-mark { font-family: var(--serif); font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+  .brand-sep { width: 1px; height: 20px; background: var(--border); }
+  .brand-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--muted); }
+  .nav-links { display: none; gap: 40px; }
+  .nav-links a { font-size: 12px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--muted); }
+  .nav-links a:hover { color: var(--text); }
+  @media (min-width: 900px) { .nav-links { display: flex; } }
+  @media (max-width: 420px) { .brand-sep, .brand-label { display: none; } }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .theme-toggle {
+    position: relative; width: 38px; height: 38px; padding: 8px; border-radius: 999px;
+    border: 1px solid transparent; transition: border-color var(--t), color var(--t);
+  }
+  .theme-toggle:hover { border-color: var(--border); color: var(--accent); }
+  .theme-toggle svg {
+    position: absolute; inset: 9px; width: 18px; height: 18px;
+    transition: opacity var(--t), transform var(--t);
+  }
+  .theme-toggle .moon { opacity: 0; transform: rotate(-90deg) scale(0.6); }
+  :root[data-dark] .theme-toggle .sun { opacity: 0; transform: rotate(90deg) scale(0.6); }
+  :root[data-dark] .theme-toggle .moon { opacity: 1; transform: none; }
+  .btn-resume {
+    display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 18px;
+    border: 1px solid var(--text); font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.2em; transition: background-color var(--t), color var(--t), border-color var(--t);
+  }
+  .btn-resume:hover { background: var(--text); color: var(--bg); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 160px 0 112px; border-bottom: 1px solid var(--border); overflow: hidden; }
+  .dots { position: absolute; inset: 0; pointer-events: none; }
+  .dots::before {
+    content: ""; position: absolute; inset: 0; opacity: var(--dot-opacity);
+    background-image: radial-gradient(var(--text) 1px, transparent 1px);
+    background-size: 40px 40px; transition: opacity var(--t);
+  }
+  .hero-grid { position: relative; display: grid; gap: 64px; align-items: center; }
+  @media (min-width: 1024px) { .hero-grid { grid-template-columns: 8fr 4fr; gap: 48px; } }
+  .eyebrow { display: flex; align-items: center; gap: 16px; margin-bottom: 36px; }
+  .eyebrow .line { width: 48px; height: 1px; background: var(--accent); }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 300; margin: 0 0 40px;
+    font-size: clamp(3.25rem, 9vw, 6rem); line-height: 0.98; letter-spacing: -0.025em;
+  }
+  .hero h1 em { font-style: italic; font-weight: 300; }
+  .hero h1 em.gold { font-weight: 400; }
+  .hero-tagline { font-family: var(--serif); font-style: italic; font-weight: 300; font-size: clamp(1.4rem, 2.6vw, 1.85rem); line-height: 1.3; color: var(--muted); margin: -16px 0 32px; max-width: 34rem; }
+  .hero-sub { max-width: 24rem; color: var(--muted); margin: 0 0 40px; font-size: 16px; }
+  .hero-sub strong { color: var(--text); font-weight: 600; }
+  .hero-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+  .link-arrow {
+    display: inline-flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.2em; padding-bottom: 6px; border-bottom: 1px solid var(--accent);
+  }
+  .link-arrow .icon { width: 14px; height: 14px; transition: transform var(--t); }
+  .link-arrow:hover .icon { transform: translate(2px, -2px); }
+  .status-dot { display: inline-flex; align-items: center; gap: 8px; }
+  .status-dot::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  .code-wrap { position: relative; justify-self: center; padding: 0 0 24px 24px; }
+  @media (min-width: 1024px) { .code-wrap { justify-self: end; } }
+  .code-window {
+    position: relative; width: 16rem; height: 24rem; background: var(--code-bg);
+    border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; flex-direction: column;
+  }
+  .code-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .code-bar .lights { display: flex; gap: 6px; }
+  .code-bar .lights i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--border); }
+  .code-bar span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); }
+  .code-window pre {
+    margin: 0; padding: 16px; font-family: var(--mono); font-size: 10.5px; line-height: 1.75;
+    color: var(--text); white-space: pre; overflow: hidden; flex: 1; font-variant-ligatures: none;
+  }
+  .tok-c { color: var(--muted); font-style: italic; }
+  .tok-k { color: var(--accent); }
+  .tok-s { color: var(--muted); }
+  .tok-n { color: var(--accent); opacity: 0.85; }
+  .code-foot { border-top: 1px solid var(--border); padding: 10px 16px; display: flex; justify-content: space-between; }
+  .code-foot span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; color: var(--muted); }
+  .bracket { position: absolute; left: 0; bottom: 0; width: 64px; height: 64px; border-left: 1px solid var(--accent); border-bottom: 1px solid var(--accent); }
+
+  /* ---------- Section heads ---------- */
+  section { position: relative; }
+  .section { padding: 128px 0; }
+  .section-head { display: grid; gap: 24px; margin-bottom: 72px; align-items: end; }
+  @media (min-width: 900px) { .section-head { grid-template-columns: 1fr auto; } }
+  .section-head h2 { font-family: var(--serif); font-weight: 300; font-size: clamp(2.5rem, 5vw, 3.75rem); line-height: 1.05; margin: 16px 0 0; letter-spacing: -0.02em; }
+  .section-head h2 em { font-style: italic; }
+  .section-head p { max-width: 26rem; color: var(--muted); margin: 0; }
+
+  /* ---------- Skills ---------- */
+  .skills-grid { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  @media (min-width: 900px) { .skills-grid { grid-template-columns: repeat(3, 1fr); } }
+  .skill-card { background: var(--bg); padding: 40px; transition: background-color var(--t); }
+  .skill-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+  .skill-top h3 { font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.15; margin: 10px 0 0; }
+  .skill-top .icon { width: 22px; height: 22px; color: var(--accent); stroke-width: 1.25; }
+  .skill-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+  .skill-row:last-child { border-bottom: 0; }
+  .skill-row .lvl { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); white-space: nowrap; }
+  .skill-row .lvl.beg { color: var(--muted); opacity: 0.75; }
+
+  /* ---------- Projects ---------- */
+  .project { position: relative; }
+  .project-media {
+    aspect-ratio: 16 / 10; background: var(--surface); overflow: hidden; border: 1px solid var(--border);
+  }
+  .project-media .art { width: 100%; height: 100%; opacity: 0.8; transition: transform 0.7s var(--ease), opacity var(--t); }
+  .project:hover .project-media .art { transform: scale(1.05); opacity: 1; }
+  .project-body { margin-top: 32px; }
+  .project-meta { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .project-cat { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+  .project-icons { display: flex; gap: 6px; }
+  .icon-btn {
+    width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border); border-radius: 999px; color: var(--muted);
+  }
+  .project:hover .icon-btn, .icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .icon-btn .icon { width: 15px; height: 15px; }
+  .project h3 { font-family: var(--serif); font-weight: 400; font-size: 1.5rem; line-height: 1.25; margin: 14px 0 12px; }
+  .project h3 a:hover { color: var(--accent); }
+  .project p { color: var(--muted); margin: 0 0 20px; font-size: 15px; max-width: 34rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { border: 1px solid var(--border); font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; color: var(--muted); }
+  .read-more { margin-top: 24px; }
+
+  .project-feature { display: grid; gap: 0; margin-bottom: 96px; }
+  @media (min-width: 1024px) {
+    .project-feature { grid-template-columns: 7fr 5fr; gap: 56px; align-items: center; }
+    .project-feature .project-body { margin-top: 0; }
+    .project-feature h3 { font-size: 2.25rem; }
+  }
+  .feature-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin: 4px 0 24px; }
+  .feature-stats div { padding: 16px 0; }
+  .feature-stats div + div { padding-left: 16px; border-left: 1px solid var(--border); }
+  .feature-stats b { display: block; font-family: var(--serif); font-weight: 400; font-size: 28px; line-height: 1.1; }
+  .feature-stats span { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+  .project-pair { display: grid; gap: 96px; }
+  @media (min-width: 900px) {
+    .project-pair { grid-template-columns: 1fr 1fr; gap: 56px; }
+    .project-pair .project:nth-child(2) { margin-top: 6rem; }
+  }
+  .disclaimer { margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+  /* ---------- Charts ---------- */
+  .ch-text { fill: var(--text); font-family: var(--mono); }
+  .ch-muted { fill: var(--muted); font-family: var(--mono); }
+  .ch-serif { fill: var(--text); font-family: var(--serif); }
+  .ch-bar { fill: var(--chart-muted); }
+  .ch-bar.hl { fill: var(--accent); }
+  .ch-rule { stroke: var(--border); stroke-width: 1; }
+  .ch-track { stroke: var(--chart-muted); fill: none; }
+  .ch-arc { stroke: var(--accent); fill: none; }
+  .ch-dot { fill: var(--accent); }
+  .ch-ring { fill: none; stroke: var(--muted); stroke-width: 1.5; }
+  .ch-hit:hover + .ch-bar, .ch-bar:hover { opacity: 0.85; }
+
+  /* ---------- Contact ---------- */
+  .contact { background: var(--bg); color: var(--text); border-top: 1px solid var(--border); padding: 128px 0 48px; }
+  .contact-grid { display: grid; gap: 72px; }
+  @media (min-width: 1024px) { .contact-grid { grid-template-columns: 7fr 5fr; gap: 64px; } }
+  .contact h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1.02; margin: 24px 0 40px; letter-spacing: -0.02em; }
+  .contact h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
+  .contact .lede { color: var(--muted); max-width: 28rem; margin: 0 0 32px; }
+  .mail-link { font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 1.9rem); border-bottom: 1px solid var(--border); padding-bottom: 6px; overflow-wrap: anywhere; }
+  .mail-link:hover { border-color: var(--accent); color: var(--accent); }
+  .link-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-content: start; }
+  .link-cols ul { list-style: none; padding: 0; margin: 20px 0 0; }
+  .link-cols li { border-bottom: 1px solid var(--border); }
+  .link-cols li a { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; font-size: 15px; }
+  .link-cols li a .icon { width: 14px; height: 14px; color: var(--muted); transition: transform var(--t), color var(--t); }
+  .link-cols li a:hover { color: var(--accent); }
+  .link-cols li a:hover .icon { color: var(--accent); transform: translate(2px, -2px); }
+  .contact-foot { margin-top: 112px; padding-top: 32px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .to-top { width: 52px; height: 52px; border-radius: 999px; border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; }
+  .to-top:hover { border-color: var(--accent); color: var(--accent); }
+  .to-top .icon { transition: transform var(--t); }
+  .to-top:hover .icon { transform: translateY(-3px); }
+
+  /* ---------- Case study dialog ---------- */
+  dialog.case {
+    width: min(820px, calc(100vw - 32px)); max-height: calc(100vh - 48px); padding: 0;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text); box-shadow: var(--shadow);
+  }
+  dialog.case::backdrop { background: rgba(11, 12, 14, 0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  dialog.case[open] { animation: rise 0.4s var(--ease); }
+  @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .case-head { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; gap: 16px; z-index: 1; }
+  .case-body { padding: 40px 28px 56px; }
+  @media (min-width: 768px) { .case-head { padding: 18px 48px; } .case-body { padding: 48px 48px 64px; } }
+  .case-body h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4.5vw, 2.75rem); line-height: 1.1; margin: 12px 0 28px; letter-spacing: -0.01em; }
+  .case-body .case-q { color: var(--text); font-family: var(--serif); font-style: italic; font-weight: 300; font-size: 1.4rem; line-height: 1.45; border-left: 1px solid var(--accent); padding-left: 20px; margin: 0 0 40px; }
+  .case-body h4 { font-family: var(--mono); font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 44px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .case-body p, .case-body li { color: var(--muted); font-size: 15px; }
+  .case-body li { margin-bottom: 10px; }
+  .case-body li strong, .case-body p strong { color: var(--text); font-weight: 600; }
+  .case-body ol, .case-body ul { padding-left: 20px; margin: 0; }
+  .case-body ol li::marker { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .kpi-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .kpi-table th { text-align: left; font-family: var(--mono); font-weight: 400; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--border); }
+  .kpi-table td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .kpi-table td.num { font-family: var(--mono); font-size: 13px; white-space: nowrap; }
+  .table-scroll { overflow-x: auto; }
+  .verdict { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
+  .verdict.yes { color: var(--accent); }
+  .verdict.no { color: var(--muted); }
+  .shots { display: grid; gap: 24px; margin: 0 0 8px; }
+  .shot { margin: 0; }
+  .shot a { display: block; border: 1px solid var(--border); overflow: hidden; background: var(--surface); }
+  .shot img { width: 100%; height: auto; transition: transform 0.7s var(--ease); }
+  .shot a:hover img { transform: scale(1.02); }
+  .shot figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .shot figcaption span:last-child { color: var(--accent); white-space: nowrap; }
+  .note { font-size: 13px !important; border: 1px solid var(--border); padding: 16px 20px; margin-top: 40px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Icon sprite (Lucide paths) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-arrow-ur" viewBox="0 0 24 24"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+</svg>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <div class="container">
+    <a href="#top" class="brand" aria-label="OnanefeTGA, back to top">
+      <span class="brand-mark">OnanefeTGA</span>
+      <span class="brand-sep" aria-hidden="true"></span>
+      <span class="brand-label">DATA ANALYST</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch colour theme">
+        <svg class="icon sun"><use href="#i-sun"/></svg>
+        <svg class="icon moon"><use href="#i-moon"/></svg>
+      </button>
+      <a class="btn-resume" href="Onanefe_Addison_CV.pdf" download>Resume</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="dots" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">
+        <span class="line" aria-hidden="true"></span>
+        <span class="mono-label">Onanefe Addison · Data Analyst</span>
+      </div>
+      <h1>Turning <em>data</em><br>into clear<br><em class="gold">decisions.</em></h1>
+      <p class="hero-tagline">Discovering problems you never knew even existed.</p>
+      <p class="hero-sub">I turn raw business data into <strong>clear answers</strong>: why customers leave, where revenue slips, and what the numbers mean for the people who have to act on them.</p>
+      <div class="hero-meta">
+        <a class="link-arrow" href="#work">Selected work <svg class="icon"><use href="#i-arrow-ur"/></svg></a>
+        <span class="mono-label status-dot">Nigeria · Open to remote</span>
+      </div>
+    </div>
+
+    <div class="code-wrap" aria-hidden="true">
+      <div class="code-window">
+        <div class="code-bar">
+          <div class="lights"><i></i><i></i><i></i></div>
+          <span>CLIMATE_EDA.SQL</span>
+        </div>
+<pre><span class="tok-c">-- early-warning risk tiers</span>
+<span class="tok-k">SELECT</span>
+  region,
+  <span class="tok-k">CASE</span>
+    <span class="tok-k">WHEN</span> ipc_phase &gt;= <span class="tok-n">4</span>
+      <span class="tok-k">THEN</span> <span class="tok-s">'CRITICAL'</span>
+    <span class="tok-k">WHEN</span> nino_anom &gt;= <span class="tok-n">1.0</span>
+     <span class="tok-k">AND</span> ipc_phase &gt;= <span class="tok-n">3</span>
+      <span class="tok-k">THEN</span> <span class="tok-s">'PRE-POSITION'</span>
+    <span class="tok-k">WHEN</span> nino_anom &gt;= <span class="tok-n">0.5</span>
+      <span class="tok-k">THEN</span> <span class="tok-s">'WARNING'</span>
+    <span class="tok-k">ELSE</span> <span class="tok-s">'STABLE'</span>
+  <span class="tok-k">END AS</span> action_plan
+<span class="tok-k">FROM</span> analysis_table
+<span class="tok-k">ORDER BY</span> year, quarter;</pre>
+        <div class="code-foot"><span>MYSQL 8</span><span>60 QTRS × 4 REGIONS</span></div>
+      </div>
+      <span class="bracket"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section" id="skills">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="mono-label">01 — Toolkit</span>
+        <h2>Skills &amp; <em>proficiency</em></h2>
+      </div>
+      <p>An honest account of where I am. I am able to clean and query in SQL and Excel, model and present in Power BI, and stay curious about the "why" behind every number.</p>
+    </div>
+
+    <div class="skills-grid">
+      <article class="skill-card">
+        <div class="skill-top">
+          <div><span class="mono-label">Query &amp; data</span><h3>SQL / MySQL</h3></div>
+          <svg class="icon" aria-hidden="true"><use href="#i-db"/></svg>
+        </div>
+        <div class="skill-row"><span>Joins &amp; CTEs</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Aggregation &amp; CASE logic</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Window functions</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Data cleaning</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>KPI queries</span><span class="lvl">Intermediate</span></div>
+      </article>
+
+      <article class="skill-card">
+        <div class="skill-top">
+          <div><span class="mono-label">Visualisation</span><h3>Power BI &amp; Excel</h3></div>
+          <svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg>
+        </div>
+        <div class="skill-row"><span>Dashboard design</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>DAX measures</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Data modelling</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Excel: pivots &amp; lookups</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Python</span><span class="lvl beg">Beginner</span></div>
+      </article>
+
+      <article class="skill-card">
+        <div class="skill-top">
+          <div><span class="mono-label">Analysis</span><h3>Methods</h3></div>
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+        </div>
+        <div class="skill-row"><span>Exploratory data analysis</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Churn &amp; retention</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Customer segmentation</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Root-cause analysis</span><span class="lvl">Intermediate</span></div>
+        <div class="skill-row"><span>Foundational statistics</span><span class="lvl">Intermediate</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORK ============ -->
+<section class="section" id="work" style="padding-top:32px">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="mono-label">02 — Selected work</span>
+        <h2>Case <em>studies</em></h2>
+      </div>
+      <p>Each project starts with a business question, tests the likely explanations one by one, and ends with a recommendation someone could act on.</p>
+    </div>
+
+    <!-- Feature: Subscription -->
+    <article class="project project-feature">
+      <a class="project-media" href="#" data-open="case-sub" aria-label="Open the subscription revenue case study">
+        <svg class="art" id="chart-sub" viewBox="0 0 800 500" role="img" aria-label="Bar chart: churned users by number of issues faced. 0 issues: 5. 1 issue: 113. 2 issues: 213. 3 issues: 454. 4 issues: 598."></svg>
+      </a>
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-cat">01 · SQL · Power BI · Root-cause analysis</span>
+          <div class="project-icons">
+            <button class="icon-btn" data-open="case-sub" aria-label="Read the case study"><svg class="icon"><use href="#i-book"/></svg></button>
+          </div>
+        </div>
+        <h3><a href="#" data-open="case-sub">Why a subscription platform's revenue slipped</a></h3>
+        <p>Revenue fell 5.75% in Q4 2025. I traced it past customer count to falling spend per customer, then to a churn problem driven by stacked technical and economic friction.</p>
+        <div class="feature-stats">
+          <div><b>−5.75%</b><span>Q4 revenue</span></div>
+          <div><b>83.7%</b><span>Churn rate</span></div>
+          <div><b>+7.4<small style="font-size:.6em"> pp</small></b><span>Top churn driver</span></div>
+        </div>
+        <div class="tags"><span class="tag">MySQL</span><span class="tag">Window functions</span><span class="tag">Data cleaning</span><span class="tag">Churn</span><span class="tag">Power BI</span></div>
+        <div class="read-more"><a class="link-arrow" href="#" data-open="case-sub">Read case study <svg class="icon"><use href="#i-arrow-ur"/></svg></a></div>
+      </div>
+    </article>
+
+    <div class="project-pair">
+      <!-- E-commerce -->
+      <article class="project">
+        <a class="project-media" href="#" data-open="case-ecom" aria-label="Open the e-commerce churn case study" style="display:block">
+          <svg class="art" id="chart-ecom" viewBox="0 0 800 500" role="img" aria-label="302 of 771 first-quarter customers, 39.2%, did not return in the second quarter. Delivery delays, returns, cancellations and product availability were supported as drivers; price, payment failures and seasonality were not."></svg>
+        </a>
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="project-cat">02 · SQL · Power BI · Churn analysis</span>
+            <div class="project-icons">
+              <button class="icon-btn" data-open="case-ecom" aria-label="Read the case study"><svg class="icon"><use href="#i-book"/></svg></button>
+            </div>
+          </div>
+          <h3><a href="#" data-open="case-ecom">Where an online retailer's customers went</a></h3>
+          <p>Four in ten Q1 customers never came back. I tested six explanations and found delivery, returns, cancellations and stock, not price or payments, behind the loss.</p>
+          <div class="tags"><span class="tag">MySQL</span><span class="tag">Hypothesis testing</span><span class="tag">Cohort churn</span><span class="tag">Power BI</span></div>
+        </div>
+      </article>
+
+      <!-- Climate -->
+      <article class="project">
+        <a class="project-media" href="#" data-open="case-clim" aria-label="Open the climate risk case study" style="display:block">
+          <svg class="art" id="chart-clim" viewBox="0 0 800 500" role="img" aria-label="Quarters at IPC Phase 3 or worse, out of 60: Southern Africa 14, Central America 14, East Africa 12, Southeast Asia 8."></svg>
+        </a>
+        <div class="project-body">
+          <div class="project-meta">
+            <span class="project-cat">03 · SQL · Exploratory analysis</span>
+            <div class="project-icons">
+              <button class="icon-btn" data-open="case-clim" aria-label="Read the case study"><svg class="icon"><use href="#i-book"/></svg></button>
+            </div>
+          </div>
+          <h3><a href="#" data-open="case-clim">Climate shocks &amp; food insecurity</a></h3>
+          <p>For NGOs and agricultural insurers: where, and under which climate conditions, food crises concentrate across four regions and fifteen years.</p>
+          <div class="tags"><span class="tag">MySQL</span><span class="tag">CTEs &amp; joins</span><span class="tag">EDA</span><span class="tag">Risk modelling</span></div>
+        </div>
+      </article>
+    </div>
+
+    <p class="mono-label disclaimer">Note · All three projects use simulated practice datasets. Company names are withheld; the analysis, SQL and findings are my own.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ CONTACT (inverted) ============ -->
+<footer class="contact inverted" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <span class="mono-label">03 — Contact</span>
+        <h2>Let's discover insights <em>hidden</em> in your data</h2>
+        <p class="lede">I'm open to entry-level and junior data analyst roles, remote or in Nigeria, and to freelance analysis work.</p>
+        <a class="mail-link" href="mailto:onanefeaddison@gmail.com">onanefeaddison@gmail.com</a>
+      </div>
+      <div class="link-cols">
+        <div>
+          <span class="mono-label">Connect</span>
+          <ul>
+            <li><a href="mailto:onanefeaddison@gmail.com">Email <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+            <li><a href="https://www.linkedin.com/in/onanefe-addison" target="_blank" rel="noopener">LinkedIn <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+            <li><a href="https://x.com/OnanefeTGA" target="_blank" rel="noopener">X / Twitter <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="mono-label">Navigate</span>
+          <ul>
+            <li><a href="#skills">Skills <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+            <li><a href="#work">Work <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+            <li><a href="Onanefe_Addison_CV.pdf" download>Resume <svg class="icon"><use href="#i-arrow-ur"/></svg></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="contact-foot">
+      <span class="mono-label">© <span id="year">2026</span> Onanefe Addison · Nigeria</span>
+      <a class="to-top" href="#top" aria-label="Back to top"><svg class="icon"><use href="#i-arrow-up"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ CASE STUDIES ============ -->
+<dialog class="case" id="case-sub" aria-labelledby="case-sub-title">
+  <div class="case-head"><span class="project-cat">Case study 01 · Subscription platform</span><button class="icon-btn" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+  <div class="case-body">
+    <span class="mono-label">MySQL · Power BI · Simulated dataset, 7 tables</span>
+    <h2 id="case-sub-title">Why a subscription platform's revenue slipped</h2>
+    <p class="case-q">"Revenue fell 5.75% (₦2.18M) in Q4 2025. Was the cause fewer customers or lower spend per customer, and what is driving it?"</p>
+
+    <h4>Power BI dashboard</h4>
+    <div class="shots">
+      <figure class="shot"><a href="images/subscription-funnel.jpg" target="_blank" rel="noopener"><img src="images/subscription-funnel.jpg" alt="Power BI page showing 1,653 total customers, 83.67% churn against 82.76% acquisition, churned users by number of issues, and the signup-to-subscription funnel." width="1280" height="719" loading="lazy"></a><figcaption><span>Page 1 · Customer funnel &amp; churn</span><span>View full size ↗</span></figcaption></figure>
+      <figure class="shot"><a href="images/subscription-revenue.jpg" target="_blank" rel="noopener"><img src="images/subscription-revenue.jpg" alt="Power BI page showing Q4 2025 revenue of 35.65M down 5.75%, cancelled plans by tier, average spend by tier for Q3 and Q4, and regional change in spend from Ibadan up to Jos down." width="1280" height="716" loading="lazy"></a><figcaption><span>Page 2 · Revenue &amp; spend</span><span>View full size ↗</span></figcaption></figure>
+    </div>
+
+    <h4>Approach</h4>
+    <ol>
+      <li><strong>Cleaned seven messy tables in MySQL:</strong> standardised text, staged working copies, removed duplicates with <code>ROW_NUMBER()</code>, converted text dates, and handled blanks and negative amounts.</li>
+      <li><strong>Decomposed revenue quarter by quarter</strong> with <code>LAG()</code> into customer count and average spend per customer. The decline came from spend, not headcount.</li>
+      <li><strong>Drilled into spend</strong> by region, plan tier, billing cycle, acquisition channel, device and app version.</li>
+      <li><strong>Compared churn with acquisition</strong>, which exposed a leaky bucket.</li>
+      <li><strong>Tested six hypotheses</strong> (network issues, economic pressure, bugs and lags, plan dissatisfaction, conversion quality, misinformation), then measured the churn uplift of each combination in percentage points.</li>
+    </ol>
+
+    <h4>Findings</h4>
+    <ul>
+      <li><strong>A retention problem, not an acquisition one.</strong> Churn of 83.67% outpaced an acquisition rate of 82.76%.</li>
+      <li><strong>Friction compounds.</strong> Churned users rose with every extra problem faced: 5 with none, 113 with one, 213 with two, 454 with three, 598 with four.</li>
+      <li><strong>Weakest segments:</strong> iOS users on app version 4.2.1 in Jos, Ilorin and Kano, and the Standard tier. Abuja, Enugu and version 4.1.0 held up. Heavy users (over 2 hours and 4 sessions) were frustrated most by platform lag.</li>
+    </ul>
+    <div class="table-scroll">
+      <table class="kpi-table" style="margin-top:20px">
+        <thead><tr><th>Issue combination</th><th>Churn rate</th><th>Vs. others</th></tr></thead>
+        <tbody>
+          <tr><td>Network issues + dissatisfied</td><td class="num">91.77%</td><td class="num gold">+7.35 pp</td></tr>
+          <tr><td>Economic constraint + dissatisfied</td><td class="num">89.72%</td><td class="num gold">+6.30 pp</td></tr>
+          <tr><td>Network issues + bugs / lags</td><td class="num">89.57%</td><td class="num gold">+5.62 pp</td></tr>
+          <tr><td>Misinformed + dissatisfied</td><td class="num">69.23%</td><td class="num">−14.61 pp</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Recommendations</h4>
+    <ul>
+      <li><strong>Engineering:</strong> ship a fix for the performance bottlenecks and error codes seen in pre-churn sessions on iOS 4.2.1, prioritising heavy users.</li>
+      <li><strong>Growth:</strong> shift acquisition spend towards more stable, less economically pressured regions such as Abuja and Enugu, to win longer-retaining customers.</li>
+      <li><strong>Product:</strong> add in-app tutorials and a clear breakdown of each plan tier to fix how the Standard tier's value is perceived.</li>
+    </ul>
+    <p class="note">Findings are associations from a simulated dataset; acquisition cost data was not available.</p>
+  </div>
+</dialog>
+
+<dialog class="case" id="case-ecom" aria-labelledby="case-ecom-title">
+  <div class="case-head"><span class="project-cat">Case study 02 · E-commerce retailer</span><button class="icon-btn" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+  <div class="case-body">
+    <span class="mono-label">MySQL · Power BI · Simulated dataset, 7 tables</span>
+    <h2 id="case-ecom-title">Where an online retailer's customers went</h2>
+    <p class="case-q">"Revenue slipped from Q1 to Q2 2026, and 302 of 771 Q1 customers never came back. What drove them away, and what should the business fix first?"</p>
+
+    <h4>Power BI dashboard</h4>
+    <div class="shots">
+      <figure class="shot"><a href="images/ecommerce-revenue.jpg" target="_blank" rel="noopener"><img src="images/ecommerce-revenue.jpg" alt="Power BI page showing revenue down 8.34M (2.02%) from Q1 to Q2, monthly revenue, revenue by category and sales channel, and returns by reason." width="1280" height="663" loading="lazy"></a><figcaption><span>Page 1 · Revenue &amp; operational efficiency</span><span>View full size ↗</span></figcaption></figure>
+      <figure class="shot"><a href="images/ecommerce-retention.jpg" target="_blank" rel="noopener"><img src="images/ecommerce-retention.jpg" alt="Power BI page showing 771 Q1 customers, 39.17% churn, 302 churned, issues associated with churn, and churned versus retained customers by region and acquisition channel." width="1280" height="664" loading="lazy"></a><figcaption><span>Page 2 · Customer retention &amp; churn</span><span>View full size ↗</span></figcaption></figure>
+    </div>
+
+    <h4>Approach</h4>
+    <ol>
+      <li><strong>Cleaned seven raw tables through SQL views:</strong> removed duplicates, set invalid dates to NULL, validated prices with a regex check, and standardised region names.</li>
+      <li><strong>Ran data-quality checks</strong> (bad dates, unusable prices, orphan orders, returns without records) before any analysis.</li>
+      <li><strong>Built a fixed churn group:</strong> customers who completed an order in Q1 but not in Q2.</li>
+      <li><strong>Flagged each customer</strong> for what they experienced in Q1 (late delivery, return, cancellation, falling stock, a price rise of 10% or more, failed payment) and compared churn between flagged and unflagged groups.</li>
+      <li><strong>Checked overlap between issues</strong>, marked small groups as unreliable, and kept association separate from causation throughout.</li>
+    </ol>
+
+    <h4>What changed, Q1 → Q2 2026</h4>
+    <div class="table-scroll">
+      <table class="kpi-table">
+        <thead><tr><th>Metric</th><th>Q1</th><th>Q2</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td class="num">413.06M</td><td class="num">404.72M</td><td class="num gold">−2.02%</td></tr>
+          <tr><td>Completed orders</td><td class="num">1,189</td><td class="num">1,178</td><td class="num">−0.93%</td></tr>
+          <tr><td>Active customers</td><td class="num">771</td><td class="num">746</td><td class="num">−3.24%</td></tr>
+          <tr><td>Repeat customer rate</td><td class="num">39.82%</td><td class="num">40.21%</td><td class="num">+0.39 pp</td></tr>
+          <tr><td>Payment failure rate</td><td class="num">6.95%</td><td class="num">6.94%</td><td class="num">−0.01 pp</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px">Spending behaviour held steady. <strong>The loss came from customers leaving: 39.17% of the Q1 base churned.</strong></p>
+
+    <h4>Hypotheses tested</h4>
+    <div class="table-scroll">
+      <table class="kpi-table">
+        <thead><tr><th>Explanation</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Late deliveries</td><td><span class="verdict yes">● Supported</span></td></tr>
+          <tr><td>Returns</td><td><span class="verdict yes">● Supported</span></td></tr>
+          <tr><td>Cancellations</td><td><span class="verdict yes">● Supported</span></td></tr>
+          <tr><td>Falling product availability</td><td><span class="verdict yes">◐ Modest</span></td></tr>
+          <tr><td>Price increases</td><td><span class="verdict no">○ Not supported</span></td></tr>
+          <tr><td>Payment failures</td><td><span class="verdict no">○ Not supported</span></td></tr>
+          <tr><td>Seasonality</td><td><span class="verdict no">○ Not supported</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Recommendations</h4>
+    <ul>
+      <li><strong>Tighten delivery:</strong> fix the regions where delays cluster, and set promised dates the network can actually meet.</li>
+      <li><strong>Restock first:</strong> prioritise the products whose availability fell from Q1 to Q2.</li>
+      <li><strong>Win customers back:</strong> follow up every return and cancellation within the quarter with a recovery offer.</li>
+      <li><strong>Leave pricing and payments alone:</strong> neither explains the churn, so changing them would spend effort in the wrong place.</li>
+    </ul>
+    <p class="note">Limitations: findings are associations, not proven causes. Availability is measured from monthly closing stock, and a single prior year cannot fully rule out seasonality.</p>
+  </div>
+</dialog>
+
+<dialog class="case" id="case-clim" aria-labelledby="case-clim-title">
+  <div class="case-head"><span class="project-cat">Case study 03 · NGOs &amp; insurers</span><button class="icon-btn" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button></div>
+  <div class="case-body">
+    <span class="mono-label">MySQL · Exploratory analysis · Simulated dataset, 3 sources</span>
+    <h2 id="case-clim-title">Climate shocks &amp; food insecurity</h2>
+    <p class="case-q">"Under which climate conditions, and in which regions, does food insecurity concentrate, so NGOs know where to act first and insurers know how to set payout triggers?"</p>
+
+    <h4>Approach</h4>
+    <ol>
+      <li><strong>Joined three sources</strong> (crop-yield and rainfall anomalies, the El Niño index, and IPC food-insecurity assessments) by quarter and region into a single SQL view: 60 quarters across four regions.</li>
+      <li><strong>Classified every quarter</strong> as El Niño, La Niña or stable, and compared rainfall, yield loss and the population in crisis, region by region.</li>
+      <li><strong>Ranked regional vulnerability</strong> and the severity at each IPC phase.</li>
+      <li><strong>Built two practical models in SQL:</strong> a parametric-insurance payout simulation, and an early-warning risk tier for NGO operations.</li>
+    </ol>
+
+    <h4>Findings</h4>
+    <ul>
+      <li><strong>El Niño drives crisis in three regions:</strong> Central America, Southeast Asia and Southern Africa.</li>
+      <li><strong>East Africa is the exception.</strong> El Niño brings it more rain; the drier La Niña periods bring crop loss and crisis.</li>
+      <li><strong>Southern Africa carries the heaviest burden:</strong> the most people in crisis on average, the highest yield loss and the highest cumulative funding.</li>
+      <li><strong>Stable climate is no safeguard.</strong> Crises still occurred in neutral quarters, including a −28.19% rainfall deficit in Southern Africa.</li>
+    </ul>
+    <div class="table-scroll">
+      <table class="kpi-table" style="margin-top:20px">
+        <thead><tr><th>Region</th><th>Quarters IPC 3+</th><th>Above-avg crisis</th><th>Main pattern</th></tr></thead>
+        <tbody>
+          <tr><td>Southern Africa</td><td class="num gold">14</td><td class="num">17</td><td>El Niño; highest yield loss</td></tr>
+          <tr><td>Central America</td><td class="num">14</td><td class="num">16</td><td>El Niño</td></tr>
+          <tr><td>East Africa (Horn)</td><td class="num">12</td><td class="num">19</td><td>Dry La Niña</td></tr>
+          <tr><td>Southeast Asia</td><td class="num">8</td><td class="num">25</td><td>El Niño</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Recommendations</h4>
+    <ul>
+      <li><strong>For NGOs:</strong> prioritise Southern Africa. Treat El Niño as the alert in three regions and dry La Niña as the alert in East Africa. Keep reserves that don't depend on a climate signal, and record when aid arrives relative to IPC phase changes.</li>
+      <li><strong>For insurers:</strong> design triggers region by region, using rainfall deviation and historical yield loss. Don't wait for an official El Niño or La Niña declaration; local rainfall thresholds belong in every trigger.</li>
+    </ul>
+    <p class="note">Limitations: these are exploratory associations, not proof that any climate condition caused the crises. Funding is cumulative, with no record of whether aid arrived before or after a crisis.</p>
+  </div>
+</dialog>
+
+<script>
+  /* ---------- Theme ---------- */
+  (function () {
+    var root = document.documentElement;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function isDark() {
+      var t = root.getAttribute('data-theme');
+      return t ? t === 'dark' : mq.matches;
+    }
+    function sync() { root.toggleAttribute('data-dark', isDark()); }
+    sync();
+    mq.addEventListener && mq.addEventListener('change', sync);
+    document.getElementById('themeToggle').addEventListener('click', function () {
+      var next = isDark() ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      sync();
+    });
+  })();
+
+  /* ---------- Case-study dialogs ---------- */
+  document.querySelectorAll('[data-open]').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      var d = document.getElementById(el.getAttribute('data-open'));
+      if (d && d.showModal) { d.showModal(); d.querySelector('.case-body').scrollTop = 0; }
+    });
+  });
+  document.querySelectorAll('dialog.case').forEach(function (d) {
+    d.querySelector('[data-close]').addEventListener('click', function () { d.close(); });
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- Charts ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(parent, tag, attrs, text) {
+    var n = document.createElementNS(NS, tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    parent.appendChild(n);
+    return n;
+  }
+  // Bar with 4px rounded data-end, square at the baseline
+  function vbar(x, yTop, w, yBase) {
+    var r = Math.min(4, (yBase - yTop) / 2);
+    return 'M' + x + ',' + yBase + 'V' + (yTop + r) + 'Q' + x + ',' + yTop + ' ' + (x + r) + ',' + yTop +
+      'H' + (x + w - r) + 'Q' + (x + w) + ',' + yTop + ' ' + (x + w) + ',' + (yTop + r) + 'V' + yBase + 'Z';
+  }
+  function hbar(xBase, y, xEnd, h) {
+    var r = Math.min(4, (xEnd - xBase) / 2);
+    return 'M' + xBase + ',' + y + 'H' + (xEnd - r) + 'Q' + xEnd + ',' + y + ' ' + xEnd + ',' + (y + r) +
+      'V' + (y + h - r) + 'Q' + xEnd + ',' + (y + h) + ' ' + (xEnd - r) + ',' + (y + h) + 'H' + xBase + 'Z';
+  }
+
+  // 1. Subscription: churned users by number of issues faced
+  (function () {
+    var s = document.getElementById('chart-sub');
+    var data = [5, 113, 213, 454, 598];
+    var x0 = 90, base = 410, top = 130, bw = 76, gap = 52, max = 600;
+    el(s, 'text', { x: 60, y: 62, class: 'ch-muted', 'font-size': 13, 'letter-spacing': 1.3 }, 'CHURNED USERS BY ISSUES FACED');
+    el(s, 'text', { x: 60, y: 98, class: 'ch-serif', 'font-size': 26, 'font-style': 'italic', 'font-weight': 300 }, 'Every extra problem, more customers lost.');
+    el(s, 'line', { x1: 60, x2: 740, y1: base + 0.5, y2: base + 0.5, class: 'ch-rule' });
+    data.forEach(function (v, i) {
+      var x = x0 + i * (bw + gap), h = Math.max(2, (v / max) * (base - top)), yT = base - h;
+      var g = el(s, 'g', {});
+      el(g, 'title', {}, v + ' churned users with ' + i + (i === 1 ? ' issue' : ' issues'));
+      el(g, 'path', { d: vbar(x, yT, bw, base), class: 'ch-bar' + (i === 4 ? ' hl' : '') });
+      el(g, 'text', { x: x + bw / 2, y: yT - 12, 'text-anchor': 'middle', class: 'ch-text', 'font-size': 15 }, v);
+      el(g, 'text', { x: x + bw / 2, y: base + 30, 'text-anchor': 'middle', class: 'ch-muted', 'font-size': 13 }, i);
+    });
+    el(s, 'text', { x: 400, y: base + 62, 'text-anchor': 'middle', class: 'ch-muted', 'font-size': 11, 'letter-spacing': 1.1 }, 'NUMBER OF ISSUES (NETWORK · ECONOMIC · BUGS · DISSATISFACTION)');
+  })();
+
+  // 2. E-commerce: share of Q1 customers lost + hypothesis verdicts
+  (function () {
+    var s = document.getElementById('chart-ecom');
+    var cx = 230, cy = 262, r = 140, sw = 16, frac = 302 / 771;
+    var C = 2 * Math.PI * r;
+    el(s, 'text', { x: 60, y: 62, class: 'ch-muted', 'font-size': 13, 'letter-spacing': 1.3 }, 'Q1 → Q2 2026 · 771 CUSTOMERS');
+    el(s, 'circle', { cx: cx, cy: cy, r: r, class: 'ch-track', 'stroke-width': sw });
+    var arc = el(s, 'circle', { cx: cx, cy: cy, r: r, class: 'ch-arc', 'stroke-width': sw, 'stroke-linecap': 'round',
+      'stroke-dasharray': (C * frac - 8) + ' ' + C, transform: 'rotate(-90 ' + cx + ' ' + cy + ')' });
+    el(arc, 'title', {}, '302 of 771 Q1 customers churned (39.17%)');
+    el(s, 'text', { x: cx, y: cy + 14, 'text-anchor': 'middle', class: 'ch-serif', 'font-size': 64, 'font-weight': 300 }, '39.2%');
+    el(s, 'text', { x: cx, y: cy + 46, 'text-anchor': 'middle', class: 'ch-muted', 'font-size': 12, 'letter-spacing': 1.2 }, '302 DID NOT RETURN');
+
+    var rows = [
+      ['Late delivery', 1], ['Returns', 1], ['Cancellations', 1], ['Availability', 0.5],
+      ['Price rises', 0], ['Payment failures', 0], ['Seasonality', 0]
+    ];
+    var lx = 470, ly = 150, step = 44;
+    el(s, 'text', { x: lx, y: ly - 30, class: 'ch-muted', 'font-size': 12, 'letter-spacing': 1.2 }, 'LINKED TO CHURN?');
+    rows.forEach(function (row, i) {
+      var y = ly + i * step;
+      var g = el(s, 'g', {});
+      el(g, 'title', {}, row[0] + ': ' + (row[1] === 1 ? 'supported' : row[1] ? 'modest association' : 'not supported'));
+      if (row[1] === 1) el(g, 'circle', { cx: lx + 7, cy: y - 5, r: 6, class: 'ch-dot' });
+      else if (row[1]) { el(g, 'circle', { cx: lx + 7, cy: y - 5, r: 6, class: 'ch-ring', style: 'stroke:var(--accent)' }); el(g, 'path', { d: 'M' + (lx + 7) + ',' + (y - 11) + 'a6,6 0 0 1 0,12z', class: 'ch-dot' }); }
+      else el(g, 'circle', { cx: lx + 7, cy: y - 5, r: 6, class: 'ch-ring' });
+      el(g, 'text', { x: lx + 26, y: y, class: row[1] ? 'ch-text' : 'ch-muted', 'font-size': 16, style: 'font-family:var(--sans)' }, row[0]);
+      if (i < rows.length - 1) el(s, 'line', { x1: lx, x2: 740, y1: y + 17.5, y2: y + 17.5, class: 'ch-rule' });
+    });
+  })();
+
+  // 3. Climate: quarters at IPC Phase 3+ by region
+  (function () {
+    var s = document.getElementById('chart-clim');
+    var data = [['Southern Africa', 14], ['Central America', 14], ['East Africa', 12], ['Southeast Asia', 8]];
+    var x0 = 250, xMax = 700, max = 16, y0 = 170, bh = 34, step = 72;
+    el(s, 'text', { x: 60, y: 62, class: 'ch-muted', 'font-size': 13, 'letter-spacing': 1.3 }, 'QUARTERS AT IPC PHASE 3+ · OF 60');
+    el(s, 'text', { x: 60, y: 98, class: 'ch-serif', 'font-size': 26, 'font-style': 'italic', 'font-weight': 300 }, 'Southern Africa bears the most.');
+    el(s, 'line', { x1: x0 - 0.5, x2: x0 - 0.5, y1: y0 - 22, y2: y0 + step * 3 + bh + 22, class: 'ch-rule' });
+    data.forEach(function (d, i) {
+      var y = y0 + i * step, xe = x0 + (d[1] / max) * (xMax - x0);
+      var g = el(s, 'g', {});
+      el(g, 'title', {}, d[0] + ': ' + d[1] + ' quarters at IPC Phase 3 or worse');
+      el(g, 'text', { x: x0 - 20, y: y + bh / 2 + 6, 'text-anchor': 'end', class: 'ch-text', 'font-size': 17, style: 'font-family:var(--sans)' }, d[0]);
+      el(g, 'path', { d: hbar(x0, y, xe, bh), class: 'ch-bar' + (i === 0 ? ' hl' : '') });
+      el(g, 'text', { x: xe + 14, y: y + bh / 2 + 6, class: 'ch-text', 'font-size': 16 }, d[1]);
+    });
+  })();
+</script>
+</body>
+</html>
